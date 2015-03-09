@@ -147,7 +147,8 @@ public class Application implements IApplication {
         // @doc http://docs.oracle.com/javase/7/docs/api/java/io/File.html
         try {
             writer.write(file.getPath()+"\n");
-        } catch(IOException ex) {
+        }
+        catch(IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
         
