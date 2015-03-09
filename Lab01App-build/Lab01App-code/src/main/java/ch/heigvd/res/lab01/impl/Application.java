@@ -141,14 +141,23 @@ public class Application implements IApplication {
          * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
          * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
          * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-         */
+         */        
+
+        // @doc http://docs.oracle.com/javase/7/docs/api/java/io/Writer.html
+        // @doc http://docs.oracle.com/javase/7/docs/api/java/io/File.html
+        try {
+            writer.write(file.getPath()+"\n");
+        } catch(IOException ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
       }
     });
   }
   
   @Override
   public String getAuthorEmail() {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+        return "benoit.zuckschwerdt@heig-vd.ch";
   }
 
   @Override
