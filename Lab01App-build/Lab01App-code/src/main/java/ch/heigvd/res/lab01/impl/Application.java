@@ -92,6 +92,7 @@ public class Application implements IApplication {
        * one method provided by this class, which is responsible for storing the content of the
        * quote in a text file (and for generating the directories based on the tags).
        */
+      storeQuote(quote, "quote-" + i + ".utf8");
       LOG.info(quote.getSource());
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -130,11 +131,12 @@ public class Application implements IApplication {
         for (String t : quote.getTags()) {
             path += "/" + t;
         }
+        path += "/";
 
         File f = new File(path);
         f.mkdirs(); // Create missing directories
 
-        FileOutputStream fos = new FileOutputStream(path + "/" + filename);
+        FileOutputStream fos = new FileOutputStream(path + filename);
         fos.write(quote.getQuote().getBytes());
     }
   
