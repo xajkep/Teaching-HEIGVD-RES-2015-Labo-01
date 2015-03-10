@@ -132,7 +132,7 @@ public class Application implements IApplication {
         }
 
         File f = new File(path);
-        f.mkdirs();
+        f.mkdirs(); // Create missing directories
 
         FileOutputStream fos = new FileOutputStream(path + "/" + filename);
         fos.write(quote.getQuote().getBytes());
