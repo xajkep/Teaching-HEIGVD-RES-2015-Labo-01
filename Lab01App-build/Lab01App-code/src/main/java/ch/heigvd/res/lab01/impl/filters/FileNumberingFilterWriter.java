@@ -17,25 +17,62 @@ import java.util.logging.Logger;
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
-  private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+    private String os = "Linux";
+    private boolean firstChar = true;
+    private int counter = 1;
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-  }
+    public FileNumberingFilterWriter(Writer out) {
+        super(out);
+    }
 
-  @Override
-  public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    @Override
+    public void write(String str, int off, int len) throws IOException {
+        str = str.substring(off, off+len);
 
-  @Override
-  public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+        if (str.contains("\r\n")) {
+            str = str.replaceAll("\r", ""); // delete all \r
+            os = "Windows";
+        } else if (str.contains("\r")) {
+            str = str.replaceAll("\r", "\n");
+            os = "Mac";
+        }
 
-  @Override
-  public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+        String outputString = "";
+        for (String line : str.split("\n")) {
+            outputString += counter++ + "\t" + line;
+
+            switch(os) {
+                case "Linux":
+                    outputString += "\n";
+                    break;
+                case "Windows":
+                    outputString += "\r\n";
+                    break;
+                case "Mac":
+                    outputString += "\r";
+                    break;
+            }
+        }
+
+        out.write(outputString);
+
+        firstChar = true;
+    }
+
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        write(new String(cbuf), off, len);
+    }
+
+    @Override
+    public void write(int c) throws IOException {
+
+        if (firstChar) {        
+            out.write(counter++ + "\t" + c);
+        } else {
+            out.write(c);
+        }
+    }
 
 }
