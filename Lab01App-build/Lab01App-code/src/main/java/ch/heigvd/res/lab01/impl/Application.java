@@ -109,24 +109,34 @@ public class Application implements IApplication {
     FileUtils.deleteDirectory(new File(WORKSPACE_DIRECTORY));    
   }
 
-  /**
-   * This method stores the content of a quote in the local file system. It has
-   * 2 responsibilities: 
-   * 
-   * - with quote.getTags(), it gets a list of tags and uses
-   *   it to create sub-folders (for instance, if a quote has three tags "A", "B" and
-   *   "C", it will be stored in /quotes/A/B/C/quotes-n.utf8.
-   * 
-   * - with quote.getQuote(), it has access to the text of the quote. It stores
-   *   this text in UTF-8 file.
-   * 
-   * @param quote the quote object, with tags and text
-   * @param filename the name of the file to create and where to store the quote text
-   * @throws IOException 
-   */
-  void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    /**
+    * This method stores the content of a quote in the local file system. It has
+    * 2 responsibilities: 
+    * 
+    * - with quote.getTags(), it gets a list of tags and uses
+    *   it to create sub-folders (for instance, if a quote has three tags "A", "B" and
+    *   "C", it will be stored in /quotes/A/B/C/quotes-n.utf8.
+    * 
+    * - with quote.getQuote(), it has access to the text of the quote. It stores
+    *   this text in UTF-8 file.
+    * 
+    * @param quote the quote object, with tags and text
+    * @param filename the name of the file to create and where to store the quote text
+    * @throws IOException 
+    */
+    void storeQuote(Quote quote, String filename) throws IOException {
+        String path = WORKSPACE_DIRECTORY;
+
+        for (String t : quote.getTags()) {
+            path += "/" + t;
+        }
+
+        File f = new File(path);
+        f.mkdirs();
+
+        FileOutputStream fos = new FileOutputStream(path + "/" + filename);
+        fos.write(quote.getQuote().getBytes());
+    }
   
   /**
    * This method uses a IFileExplorer to explore the file system and prints the name of each
