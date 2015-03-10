@@ -21,6 +21,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     private String os = "Linux";
     private boolean firstChar = true;
     private int counter = 1;
+    private int prevChar = '0';
 
     public FileNumberingFilterWriter(Writer out) {
         super(out);
@@ -40,24 +41,25 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
         String outputString = "";
         for (String line : str.split("\n")) {
-            outputString += counter++ + "\t" + line;
-
-            switch(os) {
-                case "Linux":
-                    outputString += "\n";
-                    break;
-                case "Windows":
-                    outputString += "\r\n";
-                    break;
-                case "Mac":
-                    outputString += "\r";
-                    break;
+            if (firstChar) {
+                outputString += counter++ + "\t" + line;
+                firstChar = false;
+            } else {
+                switch(os) {
+                    case "Linux":
+                        outputString += "\n";
+                        break;
+                    case "Windows":
+                        outputString += "\r\n";
+                        break;
+                    case "Mac":
+                        outputString += "\r";
+                        break;
+                }
             }
         }
 
         out.write(outputString);
-
-        firstChar = true;
     }
 
     @Override
@@ -67,12 +69,18 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(int c) throws IOException {
-
-        if (firstChar) {        
+        if (firstChar && (prevChar != '\n' || prevChar != '\r')) {        
             out.write(counter++ + "\t" + c);
+            firstChar = false;
         } else {
             out.write(c);
         }
+
+        if (c == '\n' || c == '\r') {
+            firstChar = true;
+        }
+        
+        prevChar = c;
     }
 
 }
