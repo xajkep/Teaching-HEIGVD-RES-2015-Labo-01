@@ -22,6 +22,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     private boolean firstChar = true;
     private int counter = 1;
     private int prevChar = '0';
+    private boolean firstLine = true;
 
     public FileNumberingFilterWriter(Writer out) {
         super(out);
@@ -31,6 +32,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     public void write(String str, int off, int len) throws IOException {
         str = str.substring(off, off+len);
 
+        // If needed, change newline method
         if (str.contains("\r\n")) {
             str = str.replaceAll("\r", ""); // delete all \r
             os = "Windows";
@@ -40,11 +42,9 @@ public class FileNumberingFilterWriter extends FilterWriter {
         }
 
         String outputString = "";
+        boolean containNewLine = str.contains("\n");
         for (String line : str.split("\n")) {
-            if (firstChar) {
-                outputString += counter++ + "\t" + line;
-                firstChar = false;
-            } else {
+            if (containNewLine && !firstLine) {
                 switch(os) {
                     case "Linux":
                         outputString += "\n";
@@ -56,9 +56,18 @@ public class FileNumberingFilterWriter extends FilterWriter {
                         outputString += "\r";
                         break;
                 }
+                
             }
+            
+            outputString += counter++ + "\t" + line;
+            
+            if (firstLine) firstLine = false;
         }
 
+        if (outputString.endsWith("\n") || outputString.endsWith("\r")) {
+            firstChar = true;
+        }
+        
         out.write(outputString);
     }
 
@@ -69,7 +78,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(int c) throws IOException {
-        if (firstChar && (prevChar != '\n' || prevChar != '\r')) {        
+        if (firstChar) {
             out.write(counter++ + "\t" + c);
             firstChar = false;
         } else {
