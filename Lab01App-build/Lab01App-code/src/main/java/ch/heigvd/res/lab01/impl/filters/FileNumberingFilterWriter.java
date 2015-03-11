@@ -77,7 +77,6 @@ public class FileNumberingFilterWriter extends FilterWriter {
     }
 
     @Override
-    // tested: This is line 1\r\nThis is line 2\nThis is line 3
     public void write(int c) throws IOException {
         if (firstChar) {
             firstChar = false;
