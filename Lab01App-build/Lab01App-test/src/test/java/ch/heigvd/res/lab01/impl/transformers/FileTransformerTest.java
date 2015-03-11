@@ -16,7 +16,7 @@ public class FileTransformerTest {
   
   @Test
   public void itShouldDuplicateATextFile() throws IOException {
-    FileUtils.deleteDirectory(new File("./tmp"));
+    //FileUtils.deleteDirectory(new File("./tmp"));
     new File("./tmp").mkdir();
     FileTransformer ft = new NoOpFileTransformer();
     File inputFile = new File("./tmp/test.txt");
@@ -27,7 +27,7 @@ public class FileTransformerTest {
     writer.close();
     ft.visit(inputFile);
     assertTrue( FileUtils.contentEquals(inputFile, outputFile) );
-    FileUtils.deleteDirectory(new File("./tmp"));
+    //FileUtils.deleteDirectory(new File("./tmp"));
   }
   
 }

@@ -16,7 +16,7 @@ public class CompleteFileTransformerTest {
   
   @Test
   public void itShouldApplyTwoTransformationsOnAFile() throws IOException {
-    FileUtils.deleteDirectory(new File("./tmp"));
+    //FileUtils.deleteDirectory(new File("./tmp"));
     new File("./tmp").mkdir();
     CompleteFileTransformer transformer = new CompleteFileTransformer();
     File inputFile = new File("./tmp/test.2transformations.txt");
@@ -35,7 +35,7 @@ public class CompleteFileTransformerTest {
     
     transformer.visit(inputFile);
     assertTrue( FileUtils.contentEquals(expectedFile, outputFile) );
-    FileUtils.deleteDirectory(new File("./tmp"));
+    //FileUtils.deleteDirectory(new File("./tmp"));
   }
 
 }
