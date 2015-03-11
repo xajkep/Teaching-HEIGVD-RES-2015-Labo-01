@@ -43,7 +43,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
         String outputString = "";
         boolean containNewLine = str.contains("\n");
-        for (String line : str.split("\n")) {
+        for (String line : str.split("\n", -1)) {
             if (containNewLine && !firstLine) {
                 switch(os) {
                     case "Linux":
@@ -73,14 +73,14 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        write(new String(cbuf), off, len);
+        out.write(new String(cbuf), off, len);
     }
 
     @Override
     public void write(int c) throws IOException {
         if (firstChar) {
-            out.write(counter++ + "\t" + c);
             firstChar = false;
+            out.write(new String(counter + "\t" + (char)c));
         } else {
             out.write(c);
         }
